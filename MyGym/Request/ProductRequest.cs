@@ -1,0 +1,10 @@
+﻿namespace MyGym.Request
+{
+    public class ProductRequest
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+        public int CategoryId { get; set; }
+    }
+}
