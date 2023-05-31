@@ -7,9 +7,23 @@ namespace MyGym.Database.DAL.Contracts
         Task AddAsync(T entity);
         Task UpdateAsync(T entity);
         Task RemoveAsync(T entity);
-        Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> predicate = null);
+       IQueryable<T> Get(Expression<Func<T, bool>> predicate = null);
+        IQueryable<T> Find(Expression<Func<T, bool>> expression);
 
-        Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> expression);
 
+    }
+
+    /// <summary>
+    /// interface  is composite
+    /// class is inherit 
+    /// </summary>
+
+    public abstract class AbstractRepository
+    {
+        public abstract void fun1();
+        public virtual void fun2()
+        {
+
+        }
     }
 }

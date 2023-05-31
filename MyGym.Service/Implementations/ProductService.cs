@@ -20,21 +20,36 @@ namespace MyGym.Service.Implementations
 
         public async Task<IEnumerable<ProductDto>> GetProducts()
         {
-            var data1 = await _context.Products.Include(x => x.Category).Select(x => new ProductDto
+            var data = await _productRepo.Get(x => x.IsActive)
+                .Include(x => x.Category)
+                .Select(x => new ProductDto
             {
                 Id = x.Id,
                 Name = x.Name,
                 CategoryId = x.CategoryId,
                 CategoryName = x.Category.Name,
+                Price = x.Price,
                 IsActive = x.IsActive
             }).ToListAsync();
-            //var data = (await _productRepo.GetAsync()).ToList().Select(x => new ProductDto
+
+            //var products = _context.Products.ToList();
+            //foreach (var product in products)
+            //{
+            //    var categoryName = product.Category.Name;
+            //}
+            //var data1 = await _context.Products.Include(x => x.Category)
+            //    .Where(x=>x.IsActive == true)
+            //    .Select(x => new ProductDto
             //{
             //    Id = x.Id,
             //    Name = x.Name,
-            //    Price = x.Price
-            //});
-            return data1;
+            //    CategoryId = x.CategoryId,
+            //    CategoryName = x.Category.Name,
+            //    Price = x.Price,
+            //    IsActive = x.IsActive
+            //}).ToListAsync();
+
+            return data;
         }
 
         public async Task Create(ProductDto product)
@@ -52,8 +67,8 @@ namespace MyGym.Service.Implementations
         }
         public async Task Update(ProductDto product)
         {
-            var productTobeUpdated = (await _productRepo.FindAsync(x => x.Id == product.Id)).FirstOrDefault();
-            if(productTobeUpdated != null)
+            var productTobeUpdated = ( _productRepo.Find(x => x.Id == product.Id)).FirstOrDefault();
+            if (productTobeUpdated != null)
             {
                 productTobeUpdated.Name = product.Name;
                 productTobeUpdated.Price = product.Price;
@@ -61,7 +76,12 @@ namespace MyGym.Service.Implementations
                 await _productRepo.UpdateAsync(productTobeUpdated);
                 await _context.SaveChangesAsync();
             }
-           
+        }
+        public async Task Delete(int productId)
+        {
+            var productTobeDeleted = ( _productRepo.Find(x => x.Id == productId)).FirstOrDefault();
+            if (productTobeDeleted != null)  productTobeDeleted.IsActive = false;
+            await _context.SaveChangesAsync();
         }
     }
 }

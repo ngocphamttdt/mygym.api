@@ -3,11 +3,6 @@ using MyGym.Database.DAL.Contracts;
 using MyGym.Database.Entities;
 using MyGym.Service.Contracts;
 using MyGym.Service.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyGym.Service.Implementations
 {
@@ -32,7 +27,7 @@ namespace MyGym.Service.Implementations
 
         public async Task<IEnumerable<CategoryDto>> GetAll()
         {
-           var data =  (await _categoryRepo.GetAsync()).Select(x=> new CategoryDto
+           var data =  ( _categoryRepo.Get()).Select(x=> new CategoryDto
            {
                Id = x.Id,
                Name = x.Name,

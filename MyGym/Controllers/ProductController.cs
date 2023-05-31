@@ -44,5 +44,10 @@ namespace MyGym.Controllers
             };
             await _productService.Update(productData);
         }
+        [HttpDelete("{id:int}")]
+        public async Task Delete(int id)
+        {
+           await _productService.Delete(id);
+        }
     }
 }

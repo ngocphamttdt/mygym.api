@@ -13,7 +13,7 @@ builder.Services.AddControllers();
 builder.Services.AddCors();
 
 //Register zone
-builder.Services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddTransient<IProductService, ProductService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 
@@ -23,10 +23,6 @@ builder.Services.AddDbContext<MyGymContext>(
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-
-
-
 
 var app = builder.Build();
 

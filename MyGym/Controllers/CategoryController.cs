@@ -38,7 +38,6 @@ namespace MyGym.Controllers
            await _categoryService.CreateCategory(data);
 
         }
-
        
     }
 }

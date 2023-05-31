@@ -8,6 +8,7 @@ namespace MyGym.Database.Mapping
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
+            builder.HasKey(p => p.Id);
             builder.ToTable("Products")
                    .HasOne<Category>(x=>x.Category)
                    .WithMany(p=>p.Products)

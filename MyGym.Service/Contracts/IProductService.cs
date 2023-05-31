@@ -7,5 +7,6 @@ namespace MyGym.Service.Contracts
         Task<IEnumerable<ProductDto>> GetProducts();
         Task Create(ProductDto product);
         Task Update(ProductDto product);
+        Task Delete(int productId);
     }
 }

@@ -17,14 +17,18 @@ namespace MyGym.Database.DAL.Implementations
            await _context.Set<T>().AddAsync(entity);
         }
 
-        public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> expression)
+        public  IQueryable<T> Find(Expression<Func<T, bool>> expression)
         {
-            return await _context.Set<T>().Where(expression).ToListAsync();
+            return  _context.Set<T>().Where(expression);
         }
 
-        public async Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> predicate = null)
+        public IQueryable<T> Get(Expression<Func<T, bool>> predicate = null)
         {
-            var data = await _context.Set<T>().ToListAsync();
+            var data =  _context.Set<T>().AsQueryable().AsNoTracking();
+            if(predicate != null)
+            {
+                data = data.Where(predicate);
+            }
             return data;
         }
 
