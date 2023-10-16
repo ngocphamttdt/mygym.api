@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyGym.Database;
 
@@ -11,9 +12,11 @@ using MyGym.Database;
 namespace MyGym.Database.Migrations
 {
     [DbContext(typeof(MyGymContext))]
-    partial class MyGymContextModelSnapshot : ModelSnapshot
+    [Migration("20231015084306_update-data-type1")]
+    partial class updatedatatype1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,11 +50,11 @@ namespace MyGym.Database.Migrations
 
             modelBuilder.Entity("MyGym.Database.Entities.LoginModel", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");

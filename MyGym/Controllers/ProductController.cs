@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MyGym.Request;
 using MyGym.Service.Contracts;
 using MyGym.Service.DTOs;
@@ -7,6 +8,7 @@ namespace MyGym.Controllers
 {
     [Route("api/product")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class ProductController : ControllerBase
     {
         private IProductService _productService;
@@ -21,6 +23,7 @@ namespace MyGym.Controllers
             var data = (await _productService.GetProducts()).ToList();
             return data;
         }
+
         [HttpPost]
         public async Task Post([FromBody] ProductRequest product)
         {
@@ -33,6 +36,7 @@ namespace MyGym.Controllers
             };
             await _productService.Create(data);
         }
+
         [HttpPut]
         public async Task Put([FromBody] ProductRequest product)
         {
