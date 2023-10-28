@@ -1,6 +1,4 @@
-﻿using Azure.Core;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyGym.Database;
 using MyGym.Database.Entities;
@@ -17,32 +15,46 @@ namespace MyGym.Controllers
     {
         private readonly MyGymContext _myGymContext;
         private readonly ITokenService _tokenService;
+        private readonly IAuthenticationService _authenticationService;
+        private readonly IUserService _userService;
 
         private const string REFRESH_TOKEN = "refresh_token";
 
-        public AuthController(MyGymContext myGymContext, ITokenService tokenService)
+        public AuthController(
+            MyGymContext myGymContext,
+            ITokenService tokenService,
+            IAuthenticationService authenticationService,
+            IUserService userService
+            )
         {
             _myGymContext = myGymContext;
             _tokenService = tokenService;
+            _authenticationService = authenticationService;
+            _userService = userService;
         }
 
         [HttpPost, Route("login")]
-        public IActionResult Login([FromBody] LoginModel loginModel)
+        public IActionResult Login([FromBody] UserDto userModel)
         {
-            if (loginModel == null)
+            if (userModel == null)
             {
                 return BadRequest("Invalid client request");
             }
-            var user = _myGymContext.LoginModels.FirstOrDefault(x => (x.UserName == loginModel.UserName) && (x.Password == loginModel.Password));
+
+            var user = _myGymContext.Users.FirstOrDefault(x => (x.UserName == userModel.Username));
 
             if (user == null)
             {
-                return Unauthorized();
+                return BadRequest("User not found.");
+            }
+            else if (!_authenticationService.VerifyPasswordHash(userModel.Password, user.PasswordHash, user.PasswordSalt))
+            {
+                return BadRequest("Wrong password.");
             }
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, loginModel.UserName),
+                new Claim(ClaimTypes.Name, userModel.Username),
                 new Claim(ClaimTypes.Role, "Admin")
             };
 
@@ -52,7 +64,7 @@ namespace MyGym.Controllers
             SetRefreshTokenCookie(refreshToken);
 
             user.RefreshToken = refreshToken.RToken;
-            user.RefreshTokenExpiryTime = refreshToken.Expires;
+            user.TokenExpires = refreshToken.Expires;
             _myGymContext.SaveChanges();
 
             return Ok(new AuthenticatedResponse
@@ -62,19 +74,27 @@ namespace MyGym.Controllers
             });
         }
 
+        [HttpPost, Route("register")]
+        public async Task<IActionResult> Register(UserDto user)
+        {
+            var username = await _userService.CreateUserAsync(user);
+            return Ok(new { username });
+        }
+
         [HttpPost("refresh-token")]
         public async Task<IActionResult> RefreshTokenAsync(LoginModel loginModel)
         {
             var refreshToken = Request.Cookies[REFRESH_TOKEN];
-            var user = await _myGymContext.LoginModels.FirstOrDefaultAsync(x => x.UserName == loginModel.UserName);
+            var user = await _myGymContext.Users.FirstOrDefaultAsync(x => x.UserName == loginModel.UserName);
             if (user == null)
             {
                 return Unauthorized("User is not found");
             }
-            else if(user.RefreshToken != refreshToken) {
+            else if (user.RefreshToken != refreshToken)
+            {
                 return Unauthorized("Invalid Refresh Token.");
             }
-            else if(user.RefreshTokenExpiryTime <DateTime.Now)
+            else if (user.TokenExpires < DateTime.Now)
             {
                 return Unauthorized("Token expired.");
             }

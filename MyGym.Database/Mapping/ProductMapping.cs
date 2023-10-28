@@ -12,7 +12,7 @@ namespace MyGym.Database.Mapping
             builder.ToTable("Products")
                    .HasOne<Category>(x=>x.Category)
                    .WithMany(p=>p.Products)
-                   .HasForeignKey(x=>x.CategoryId)
+                   .HasForeignKey(x=> x.CategoryId)
                  ;
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
         }

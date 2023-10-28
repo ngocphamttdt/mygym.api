@@ -30,13 +30,13 @@ namespace MyGym.Controllers
             var principal = _tokenService.GetPrincipalFromExpiredToken(accessToken);
             var userName = principal.Identity.Name; //this is mapped to the Name claim by default
 
-            var user = _myGymContext.LoginModels.SingleOrDefault(x => x.UserName == userName);
-            if(user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
+            var user = _myGymContext.Users.SingleOrDefault(x => x.UserName == userName);
+            if (user == null || user.RefreshToken != refreshToken || user.TokenExpires <= DateTime.Now)
                 return BadRequest("Invalid client request");
 
             var newAccessToken = _tokenService.GenerateAccessToken(principal.Claims);
             var newRefreshToken = _tokenService.GenerateRefreshToken();
-            
+
             user.RefreshToken = newRefreshToken.RToken;
             _myGymContext.SaveChanges();
 

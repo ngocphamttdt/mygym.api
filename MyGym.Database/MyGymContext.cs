@@ -9,12 +9,13 @@ namespace MyGym.Database
         public MyGymContext(DbContextOptions<MyGymContext> options) : base(options) { }
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<LoginModel> LoginModels { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new ProductMapping());
-            modelBuilder.ApplyConfiguration(new LoginModelMapping());
+            modelBuilder.ApplyConfiguration(new CategoryMapping());
+            modelBuilder.ApplyConfiguration(new UserMapping());
         }
     }
 }

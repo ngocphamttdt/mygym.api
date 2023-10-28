@@ -22,7 +22,8 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddTransient<IProductService, ProductService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<ITokenService, TokenService>();
-
+builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
+builder.Services.AddTransient<IUserService, UserService>();
 
 builder.Services.AddDbContext<MyGymContext>(
                    options => options.UseSqlServer("name=ConnectionStrings:DefaultDb"));
@@ -67,8 +68,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseHttpsRedirection();
-
-
 
 app.MapControllers();
 
