@@ -9,18 +9,15 @@ namespace MyGym.Service.Implementations
     {
         private readonly MyGymContext _context;
         private readonly IAuthenticationService _authenticationService;
-        private readonly IUserService _userService;
         private readonly ITokenService _tokenService;
 
         public UserService(
             MyGymContext myGymContext,
             IAuthenticationService authenticationService,
-            IUserService userService,
             ITokenService tokenService
             ) {
             _context = myGymContext;
             _authenticationService = authenticationService;
-            _userService = userService;
             _tokenService = tokenService;
         }
         public async Task<string> CreateUserAsync(UserDto userDto)

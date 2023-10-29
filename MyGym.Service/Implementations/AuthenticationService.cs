@@ -1,5 +1,4 @@
-﻿
-using MyGym.Service.Contracts;
+﻿using MyGym.Service.Contracts;
 using MyGym.Service.DTOs;
 using System.Security.Cryptography;
 
