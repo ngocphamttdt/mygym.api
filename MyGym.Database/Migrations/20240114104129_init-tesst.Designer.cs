@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyGym.Database;
 
@@ -11,9 +12,11 @@ using MyGym.Database;
 namespace MyGym.Database.Migrations
 {
     [DbContext(typeof(MyGymContext))]
-    partial class MyGymContextModelSnapshot : ModelSnapshot
+    [Migration("20240114104129_init-tesst")]
+    partial class inittesst
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
