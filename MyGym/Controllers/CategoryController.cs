@@ -15,6 +15,7 @@ namespace MyGym.Controllers
         {
             _categoryService = categoryService;
         }
+
         [HttpGet]
         public async Task<IEnumerable<CategoryResponse>> Get()
         {
@@ -26,6 +27,7 @@ namespace MyGym.Controllers
             });
             return categories;
         }
+
         [HttpPost]
         public async Task Post([FromBody] CategoryRequest category)
         {

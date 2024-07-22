@@ -24,6 +24,10 @@ builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IBankBrandService, BankBrandService>();
+builder.Services.AddTransient<IBankAccountService, BankAccountService>();
+
+builder.Services.AddScoped<IGuidService, GuidService>();
 
 builder.Services.AddDbContext<MyGymContext>(
                    options => options.UseSqlServer("name=ConnectionStrings:DefaultDb"));

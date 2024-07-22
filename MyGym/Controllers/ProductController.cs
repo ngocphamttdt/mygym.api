@@ -8,7 +8,7 @@ namespace MyGym.Controllers
 {
     [Route("api/product")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public class ProductController : ControllerBase
     {
         private IProductService _productService;
